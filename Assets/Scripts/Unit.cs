@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
         InitUnitType(UT);
     }
 
-    static Unit() => new Unit();
+    static Unit() => new Unit(UnitType.Null);
 
     public void InitUnitType(UnitType UT) {
         switch(UT) {
@@ -28,7 +28,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    InitWarrior() { 
+    void InitWarrior() { 
         Name = "Warrior";
         HP = 10;
         AP = 4;
@@ -38,7 +38,7 @@ public class Unit : MonoBehaviour
         RangedDefense = 5;
     }
 
-    InitHunter() { 
+    void InitHunter() { 
         Name = "Hunter";
         HP = 5;
         AP = 4;
