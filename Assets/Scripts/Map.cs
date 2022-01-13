@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Map
 {
     public Map(int x, int y)
