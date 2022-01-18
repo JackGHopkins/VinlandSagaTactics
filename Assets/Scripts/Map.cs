@@ -2,9 +2,18 @@ using UnityEngine;
 
 public class Map
 {
-    public Map(int x, int y)
+    private int Width;
+    private int Height;
+    private Vector2 CellSize;
+    private MapTile[,] GridArray;
+
+    public Map(int x, int y, Vector2 CellSize, Vector3 MapOrigin)
     {
-        MapTile[,] grid = new MapTile[x, y];
+        Width = x;
+        Height = y;
+        this.CellSize = CellSize;
+
+        MapTile[,] GridArray = new MapTile[x, y];
     }
 }
 

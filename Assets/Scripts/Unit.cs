@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : MapElement
 {
-    public int HP, AP, Attack, Defense, RangedAttack, RangedDefense;
-    public string Name;
-    public Vector2 Position;
-    public StatusEffect StatusEffect;
+    private int HP, AP, Attack, Defense, RangedAttack, RangedDefense;
+    private string Name;
+    private StatusEffect StatusEffect = StatusEffect.Null;
 
-    public Unit(UnitType UT){
-        InitUnitType(UT);
+    [SerializeField] UnitType UnitType = UnitType.Null;
+    [SerializeField] UnitTeam UnitTeam = UnitTeam.Null;
+
+    //static Unit() => new Unit();
+
+    private Unit()
+    {
+        InitUnitType();
     }
 
-    static Unit() => new Unit(UnitType.Null);
-
-    public void InitUnitType(UnitType UT) {
-        switch(UT) {
+    public void InitUnitType() {
+        switch(UnitType) {
             case UnitType.Null:
                 break;
             case UnitType.Warrior:
