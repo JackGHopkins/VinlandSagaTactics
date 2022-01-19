@@ -1,25 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class MainGame : MonoBehaviour
 {
-    private Map Map;
-    private bool PlayerTurn = true;
+    private bool playerTurn = true;
+    private Unit curUnit;
 
-    [SerializeField] int Width = 5;
-    [SerializeField] int Height = 5;
-    [SerializeField] Vector2 CellSize;
-    [SerializeField] Vector3 MapOrigin;
-    [SerializeField] Cursor Cursor;
-    [SerializeField] Unit[] TeamPlayer;
-    [SerializeField] Unit[] TeamEnemy;
+    [SerializeField] int width = 5;
+    [SerializeField] int height = 5;
+    [SerializeField] Vector2 cellSize;
+    [SerializeField] Vector3 mapOrigin;
+    [SerializeField] Cursor cursor;
+    [SerializeField] Unit[] teamPlayer;
+    [SerializeField] Unit[] teamEnemy;
 
+    public Map map;
+    public Tilemap tilemap;
     // Start is called before the first frame update
     void Awake()
     {
-        PlayerTurn = true;
-        Map = new Map(Width, Height, CellSize, MapOrigin);
+        map = new Map(width, height, cellSize, mapOrigin);
+        playerTurn = true;
     }
 
     // Update is called once per frame
@@ -27,20 +30,31 @@ public class MainGame : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(PlayerTurn)
-                TeamPlayer[0].SetWorldPosition(Cursor.Position, CellSize);
+            if (cursor.selected)
+            {
+                cursor.selected = false;
+                curUnit.SetPosition(cursor.cellPosition);
+                Debug.Log("Moved: " + curUnit.name + " to: " + curUnit.cellPosition);
+                curUnit = null;
+            }
             else
-                TeamEnemy[0].SetWorldPosition(Cursor.Position, CellSize);
-
-            ChangeTurns();
+            {
+                if (map.GridArray[cursor.cellPosition.x, cursor.cellPosition.y].occupied)
+                {
+                    cursor.selected = true;
+                    curUnit = map.GridArray[cursor.cellPosition.x, cursor.cellPosition.y].currentUnit;
+                    Debug.Log("Selected: " + curUnit.name + " at: " + curUnit.cellPosition);
+                }
+            }
         }
     }
-    public int GetMapWidth() { return Width; }
-    public int GetMapHeight() { return Height; }
-    public Vector2 GetCellSize() { return CellSize; }
+
+    public int GetMapWidth() { return width; }
+    public int GetMapHeight() { return height; }
+    public Vector2 GetCellSize() { return cellSize; }
 
     private void ChangeTurns()
     {
-        PlayerTurn = !PlayerTurn;
+        playerTurn = !playerTurn;
     }
 }

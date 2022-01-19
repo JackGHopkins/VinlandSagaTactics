@@ -4,45 +4,45 @@ using UnityEngine;
 
 public class CameraCursor : MonoBehaviour
 {
-    private Vector3 OriginalCameraPosition;
-    private float OriginalZoom = 1.35f;
-    private float MaxZoom = 1.35f * 2;
-    private float MinZoom = 1.35f / 2;
-    private float CurrentZoom;
+    private Vector3 originalCameraPosition;
+    private float originalZoom = 1.35f;
+    private float maxZoom = 1.35f * 2;
+    private float minZoom = 1.35f / 2;
+    private float currentZoom;
 
-    public Cursor Cursor;
-    public bool CursorLock = false;
-    public Camera Camera;
+    public Cursor cursor;
+    public bool cursorLock = false;
+    public Camera camera;
 
     // Start is called before the first frame update
     void Start()
     {
-        CurrentZoom = OriginalZoom;
-        OriginalCameraPosition = this.transform.position;
+        currentZoom = originalZoom;
+        originalCameraPosition = this.transform.position;
 
-        if(CursorLock)
-            this.transform.position = new Vector3(Cursor.transform.position.x, Cursor.transform.position.y, -10);
+        if(cursorLock)
+            this.transform.position = new Vector3(cursor.transform.position.x, cursor.transform.position.y, -10);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (CursorLock)
-            this.transform.position = new Vector3(Cursor.transform.position.x, Cursor.transform.position.y, -10);
+        if (cursorLock)
+            this.transform.position = new Vector3(cursor.transform.position.x, cursor.transform.position.y, -10);
 
-        if (Input.GetKeyDown(KeyCode.Q) && CurrentZoom != MaxZoom)
-            CurrentZoom *= 2;
+        if (Input.GetKeyDown(KeyCode.Q) && currentZoom != maxZoom)
+            currentZoom *= 2;
 
-        if (Input.GetKeyDown(KeyCode.E) && CurrentZoom != MinZoom)
-            CurrentZoom /= 2;
+        if (Input.GetKeyDown(KeyCode.E) && currentZoom != minZoom)
+            currentZoom /= 2;
 
         // Tool Bar
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            CursorLock = !CursorLock;
-            this.transform.position = (CursorLock) ? new Vector3(Cursor.transform.position.x, Cursor.transform.position.y, -10) : OriginalCameraPosition;
+            cursorLock = !cursorLock;
+            this.transform.position = (cursorLock) ? new Vector3(cursor.transform.position.x, cursor.transform.position.y, -10) : originalCameraPosition;
         }
 
-        Camera.orthographicSize = CurrentZoom;
+        camera.orthographicSize = currentZoom;
     }
 }
