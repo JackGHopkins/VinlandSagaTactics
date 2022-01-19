@@ -28,6 +28,15 @@ public class MainGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckUnitSelected();
+    }
+
+    public int GetMapWidth() { return width; }
+    public int GetMapHeight() { return height; }
+    public Vector2 GetCellSize() { return cellSize; }
+
+    private void CheckUnitSelected()
+    {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (cursor.selected)
@@ -48,10 +57,6 @@ public class MainGame : MonoBehaviour
             }
         }
     }
-
-    public int GetMapWidth() { return width; }
-    public int GetMapHeight() { return height; }
-    public Vector2 GetCellSize() { return cellSize; }
 
     private void ChangeTurns()
     {

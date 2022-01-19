@@ -23,6 +23,33 @@ TextureImporter:
   - first:
       213: 288800068945104484
     second: Test Isometric_6
+  - first:
+      213: -1113360555507052762
+    second: TestIsometric_32_0
+  - first:
+      213: -6684568252755908963
+    second: TestIsometric_32_1
+  - first:
+      213: 2232602234625111951
+    second: TestIsometric_32_2
+  - first:
+      213: 1381753819288113477
+    second: TestIsometric_32_3
+  - first:
+      213: 2024033993413907326
+    second: TestIsometric_32_4
+  - first:
+      213: -5189617503832226696
+    second: TestIsometric_32_5
+  - first:
+      213: 1048247929109957120
+    second: TestIsometric_32_6
+  - first:
+      213: -1592641036663602251
+    second: TestIsometric_32_7
+  - first:
+      213: 645601377331284295
+    second: TestIsometric_32_8
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -112,7 +139,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Test Isometric_0
+      name: TestIsometric_32_0
       rect:
         serializedVersion: 2
         x: 0
@@ -126,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 547c91847553157e0800000000000000
-      internalID: -1778581728846559419
+      spriteID: 62f021e397c8c80f0800000000000000
+      internalID: -1113360555507052762
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Test Isometric_1
+      name: TestIsometric_32_1
       rect:
         serializedVersion: 2
         x: 64
@@ -147,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3cb93142433a13450800000000000000
-      internalID: 6066809617383660483
+      spriteID: d9661a92794ab33a0800000000000000
+      internalID: -6684568252755908963
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Test Isometric_2
+      name: TestIsometric_32_2
       rect:
         serializedVersion: 2
         x: 128
@@ -168,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fca666a443dd53f90800000000000000
-      internalID: -6974425231257081137
+      spriteID: f87b29f47ebcbfe10800000000000000
+      internalID: 2232602234625111951
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Test Isometric_3
+      name: TestIsometric_32_3
       rect:
         serializedVersion: 2
         x: 192
@@ -189,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f9deee5e6e8d2cb0800000000000000
-      internalID: -4887093415936861704
+      spriteID: 54115bd17c9fc2310800000000000000
+      internalID: 1381753819288113477
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Test Isometric_4
+      name: TestIsometric_32_4
       rect:
         serializedVersion: 2
         x: 256
@@ -210,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e5e0a593477bacff0800000000000000
-      internalID: -14997938936082850
+      spriteID: e7350c67130d61c10800000000000000
+      internalID: 2024033993413907326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Test Isometric_5
+      name: TestIsometric_32_5
       rect:
         serializedVersion: 2
         x: 320
@@ -231,14 +258,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: feed0966d6ccbb4e0800000000000000
-      internalID: -1964752042172817681
+      spriteID: 8744ee34066caf7b0800000000000000
+      internalID: -5189617503832226696
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Test Isometric_6
+      name: TestIsometric_32_6
       rect:
         serializedVersion: 2
         x: 384
@@ -252,8 +279,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 46ec490f126020400800000000000000
-      internalID: 288800068945104484
+      spriteID: 00a432b00ff1c8e00800000000000000
+      internalID: 1048247929109957120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestIsometric_32_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b3c4f25a6dc5e9e0800000000000000
+      internalID: -1592641036663602251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestIsometric_32_8
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 160
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 749855a3803a5f800800000000000000
+      internalID: 645601377331284295
       vertices: []
       indices: 
       edges: []

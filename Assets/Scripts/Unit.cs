@@ -11,7 +11,8 @@ public class Unit : MapElement
     [SerializeField] UnitType unitType = UnitType.Null;
     [SerializeField] UnitTeam unitTeam = UnitTeam.Null;
 
-    public bool TurnComplete;
+    public bool turnComplete;
+    public bool selected = false;
 
     //static Unit() => new Unit();
 

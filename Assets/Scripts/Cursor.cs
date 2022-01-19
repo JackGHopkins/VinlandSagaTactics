@@ -10,6 +10,10 @@ public class Cursor : MapElement
     public bool followKeyboard;
     public bool selected;
 
+    private float timeSpan = 0.08f;
+    private float time;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,32 +24,21 @@ public class Cursor : MapElement
     void Update()
     {
 
-        if (followKeyboard)
-        {
-            if (Input.GetKeyDown(KeyCode.W) && cellPosition.y > 0)
-            {
-                cellPosition.y--;
-                SetWorldPosition(cellPosition, game);
-            }
-            if (Input.GetKeyDown(KeyCode.S) && cellPosition.y < game.GetMapHeight() - 1)
-            {
-                cellPosition.y++;
-                SetWorldPosition(cellPosition, game);
-            }
-            if (Input.GetKeyDown(KeyCode.A) && cellPosition.x > 0)
-            {
-                cellPosition.x--;
-                SetWorldPosition(cellPosition, game);
-            }
-            if (Input.GetKeyDown(KeyCode.D) && cellPosition.x < game.GetMapWidth() - 1)
-            {
-                cellPosition.x++;
-                SetWorldPosition(cellPosition, game);
-            }
-        }
+        KeyBoardControls();
 
         if (followMouse)
             FollowMouse();
+
+        // Tool Bar
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            followMouse = !followMouse;
+        }
+        // Tool Bar
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            followKeyboard = !followKeyboard;
+        }
     }
 
     private void FollowMouse()
@@ -59,5 +52,50 @@ public class Cursor : MapElement
             SetMousePosition(MapPosition, game);
             cellPosition = -tilemap.WorldToCell(MousePos);
         }
+    }
+
+    private void KeyBoardControls()
+    {
+        if (followKeyboard)
+        {
+            if (Input.GetKey(KeyCode.W) && cellPosition.y > 0 && MovementInhibiter())
+            {
+                cellPosition.y--;
+                SetWorldPosition(cellPosition, game);
+            }
+            if (Input.GetKey(KeyCode.S) && cellPosition.y < game.GetMapHeight() - 1 && MovementInhibiter())
+            {
+                cellPosition.y++;
+                SetWorldPosition(cellPosition, game);
+            }
+            if (Input.GetKey(KeyCode.D) && cellPosition.x > 0 && MovementInhibiter())
+            {
+                cellPosition.x--;
+                SetWorldPosition(cellPosition, game);
+            }
+            if (Input.GetKey(KeyCode.A) && cellPosition.x < game.GetMapWidth() - 1 && MovementInhibiter())
+            {
+                cellPosition.x++;
+                SetWorldPosition(cellPosition, game);
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D))
+            time = 0f;
+    }
+
+    private bool MovementInhibiter()
+    {
+        if (time == 0f)
+        {
+            time += Time.deltaTime;
+            return true;
+        }
+
+        time += Time.deltaTime;
+
+        if(time > timeSpan)
+            time = 0f;
+        return false;
     }
 }
