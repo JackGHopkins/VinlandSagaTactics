@@ -43,6 +43,8 @@ public class MainGame : MonoBehaviour
             {
                 cursor.selected = false;
                 curUnit.SetPosition(cursor.cellPosition);
+                curUnit.selected = false;
+                curUnit.tileDrawn = false;
                 Debug.Log("Moved: " + curUnit.name + " to: " + curUnit.cellPosition);
                 curUnit = null;
             }
@@ -52,6 +54,7 @@ public class MainGame : MonoBehaviour
                 {
                     cursor.selected = true;
                     curUnit = map.GridArray[cursor.cellPosition.x, cursor.cellPosition.y].currentUnit;
+                    curUnit.selected = true;
                     Debug.Log("Selected: " + curUnit.name + " at: " + curUnit.cellPosition);
                 }
             }

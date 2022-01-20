@@ -34,7 +34,6 @@ public class Cursor : MapElement
         {
             followMouse = !followMouse;
         }
-        // Tool Bar
         if (Input.GetKeyDown(KeyCode.F3))
         {
             followKeyboard = !followKeyboard;

@@ -28,7 +28,7 @@ public class MapElement : MonoBehaviour
         this.transform.position = worldPos;
     }
     
-    private Vector3Int SwitchXandY(Vector3Int position)
+    public Vector3Int SwitchXandY(Vector3Int position)
     {
         int temp;
         temp = position.x;
