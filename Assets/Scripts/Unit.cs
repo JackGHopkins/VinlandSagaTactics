@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Unit : MapElement
 {
-    private int HP, AP, Attack, Defense, RangedAttack, RangedDefense;
+    private int HP, AP, CurAP, Attack, Defense, RangedAttack, RangedDefense;
+    private int MAX_AP = 6;
     private StatusEffect statusEffect = StatusEffect.Null;
 
     [SerializeField] string name;
@@ -34,24 +35,8 @@ public class Unit : MapElement
 
     private void Update()
     {
-        if (selected)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                DestroyTiles();
-                unitSelection = UnitSelection.Move;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                DestroyTiles();
-                unitSelection = UnitSelection.Attack;
-            }
-            DrawTiles();
-        } else
-        {
-            if (tilesUI[0])
-                DestroyTiles();
-        }
+        if (turnComplete)
+            SetNextTurnAP();
     }
 
     public void InitUnitType() {
@@ -76,7 +61,7 @@ public class Unit : MapElement
     void InitWarrior() { 
         name = "Warrior";
         HP = 10;
-        AP = 2;
+        AP = 7;
         Attack = 5;
         Defense = 5;
         RangedAttack = 0;
@@ -95,39 +80,81 @@ public class Unit : MapElement
 
     private bool CheckPosition(Vector3Int position)
     {
-        if (!game.map.GridArray[position.x, position.y].occupied)
+        if (!game.map.grid[position.x, position.y].occupied)
             return true;
         Debug.Log("Grid Element Overlap: There is already a Unit in this Grid Position");
         return false;
     }
 
-    private void DrawTiles()
+    public void DrawTiles(Pathfinding pathfinding)
     {
-        if (!tileDrawn)
+        if (selected)
         {
-            if (unitSelection == UnitSelection.Move)
-                DrawMovement();
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                DestroyTiles();
+                unitSelection = UnitSelection.Move;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                DestroyTiles();
+                unitSelection = UnitSelection.Attack;
+            }
 
-            if (unitSelection == UnitSelection.Attack)
-                DrawAttack();
+            // Draw Tiles
+            if (!tileDrawn)
+            {
+                if (unitSelection == UnitSelection.Move)
+                    DrawMovement(pathfinding);
 
-            tileDrawn = true;
+                if (unitSelection == UnitSelection.Attack)
+                    DrawAttack();
+
+                tileDrawn = true;
+            }
+        }
+        else
+        {
+            if (tilesUI[0])
+                DestroyTiles();
         }
     }
 
-    private void DrawMovement()
+    private void DrawMovement(Pathfinding pathfinding)
     {
-        int tileArrEle = 0;
-        int orignal = 2;
-        int h = orignal;
-        int w = 0;
-        for (int i = -h; i <= h; i++)
+        int tile = 0;
+        //int orignal = 2;
+        //int h = orignal;
+        //int w = 0;
+        //for (int i = -h; i <= h; i++)
+        //{
+        //    w = orignal - Math.Abs(i);
+        //    for (int j = -w; j <= w; j++)
+        //    {
+        //        tilesUI[tile] = Instantiate(tileMovementPrefab, ReturnCellPosition(new Vector3Int(cellPosition.x + i, cellPosition.y + j, 0)), transform.rotation);
+        //        tile++;
+        //    }
+        //}
+        for (int i = cellPosition.x - AP; i <= cellPosition.x + AP; i++)
         {
-            w = orignal - Math.Abs(i);
-            for (int j = -w; j <= w; j++)
+            if (i < 0 || i > game.map.grid.GetLength(0))
+                continue;
+            for (int j = cellPosition.y - AP; j <= cellPosition.y + AP; j++)
             {
-                tilesUI[tileArrEle] = Instantiate(tileMovementPrefab, ReturnCellPosition(new Vector3Int(cellPosition.x + i, cellPosition.y + j, 0)), transform.rotation);
-                tileArrEle++;
+                if (j < 0 || j > game.map.grid.GetLength(0))
+                    continue;
+                if (pathfinding.grid.grid[i, j].isWalkable)
+                {
+                    List<PathNode> path = pathfinding.FindPath(cellPosition.x, cellPosition.y, i, j);
+                    if (path != null)
+                    {
+                        if(path.Count <= AP)
+                        {
+                            tilesUI[tile] = Instantiate(tileMovementPrefab, ReturnCellPosition(new Vector3Int(i, j, 0)), transform.rotation);
+                            tile++;
+                        }
+                    }
+                }
             }
         }
     }
@@ -149,9 +176,9 @@ public class Unit : MapElement
 
     private void OccupyTile(Vector3Int position)
     {
-        game.map.GridArray[cellPosition.x, cellPosition.y].occupied = false;
-        game.map.GridArray[position.x, position.y].occupied = true;
-        game.map.GridArray[position.x, position.y].currentUnit = this;
+        game.map.grid[cellPosition.x, cellPosition.y].occupied = false;
+        game.map.grid[position.x, position.y].occupied = true;
+        game.map.grid[position.x, position.y].currentUnit = this;
     }
 
     public void SetPosition(Vector3Int position)
@@ -164,6 +191,7 @@ public class Unit : MapElement
         }
     }
 
+    // Returns Position of Cell in the world
     public Vector3 ReturnCellPosition(Vector3Int pos)
     {
         pos = SwitchXandY(pos);
@@ -173,4 +201,11 @@ public class Unit : MapElement
         return worldPos;
     }
 
+    private void SetNextTurnAP()
+    {
+        this.AP += 4;
+        if (AP > 6)
+            AP = 6;
+        CurAP = AP;
+    }
 }

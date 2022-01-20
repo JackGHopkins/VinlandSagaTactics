@@ -1,32 +1,28 @@
+using System;
 using UnityEngine;
 
-public class Map
+public class Map<T>
 {
     private int Width;
     private int Height;
     private Vector2 CellSize;
-    public MapTile[,] GridArray;
+    public T[,] grid;
 
-    public Map(int x, int y, Vector2 CellSize, Vector3 MapOrigin)
+    public Map(int x, int y, Vector2 CellSize, Vector3 MapOrigin, Func<Map<T>, int, int, T> createGridObject)
     {
         Width = x;
         Height = y;
         this.CellSize = CellSize;
 
-        GridArray = new MapTile[Width, Height];
+        grid = new T[Width, Height];
 
-        for (int i = 0; i < GridArray.GetLength(0); i++)
+        for (int i = 0; i < grid.GetLength(0); i++)
         {
-            for (int j = 0; j < GridArray.GetLength(1); j++)
+            for (int j = 0; j < grid.GetLength(1); j++)
             {
-                GridArray[i, j] = new MapTile(new Vector2(i, j), 1);
+                grid[i, j] = createGridObject(this, i, j);
             }
         }
-    }
-
-    void Start()
-    {
-
     }
 }
 
