@@ -1931,7 +1931,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &1423414009
+--- !u!43 &1439427761
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2278,8 +2278,8 @@ MonoBehaviour:
   - {x: -0.08597696, y: 0.29671887, z: 0}
   - {x: -0.056891084, y: 0.27907056, z: 0}
   m_ShapePathHash: 369306157
-  m_Mesh: {fileID: 1423414009}
-  m_InstanceId: 19144
+  m_Mesh: {fileID: 1439427761}
+  m_InstanceId: 19818
 --- !u!212 &1950218548
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2361,9 +2361,9 @@ MonoBehaviour:
   cellPosition: {x: 1, y: 1, z: 0}
   game: {fileID: 2055347296}
   name: Hild
-  unitType: 2
+  unitClass: 4
   unitTeam: 1
-  unitSelection: 0
+  unitSelection: 1
   tileMovementPrefab: {fileID: 1199547713807733725, guid: becf62fbe4a57d643bce311a5cda5db2, type: 3}
   tileAttackPrefab: {fileID: 1199547713807733725, guid: f3d376129cb5827408ca5b37205b0622, type: 3}
   turnComplete: 0
@@ -2542,7 +2542,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!43 &2008075753
+--- !u!43 &2009328768
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2755,8 +2755,8 @@ MonoBehaviour:
   - {x: -0.055309013, y: 0.30534422, z: 0}
   - {x: -0.040598735, y: 0.2838624, z: 0}
   m_ShapePathHash: -782024948
-  m_Mesh: {fileID: 2008075753}
-  m_InstanceId: 19170
+  m_Mesh: {fileID: 2009328768}
+  m_InstanceId: 19846
 --- !u!212 &2012902143
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2838,7 +2838,7 @@ MonoBehaviour:
   cellPosition: {x: 0, y: 0, z: 0}
   game: {fileID: 2055347296}
   name: Thorfinn
-  unitType: 1
+  unitClass: 3
   unitTeam: 2
   unitSelection: 0
   tileMovementPrefab: {fileID: 1199547713807733725, guid: becf62fbe4a57d643bce311a5cda5db2, type: 3}

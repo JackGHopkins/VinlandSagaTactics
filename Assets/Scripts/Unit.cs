@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Unit : MapElement
 {
-    private int HP, AP, CurAP, Attack, Defense, RangedAttack, RangedDefense;
+    private int HP, AP, CurAP, Attack, Defense, RangedAttack, RangedDefense, Range;
     private int MAX_AP = 6;
     private StatusEffect statusEffect = StatusEffect.Null;
 
     [SerializeField] string name;
-    [SerializeField] UnitClass unitType = UnitClass.Null;
+    [SerializeField] UnitClass unitClass = UnitClass.Null;
     [SerializeField] UnitTeam unitTeam = UnitTeam.Null;
     [SerializeField] UnitSelection unitSelection = UnitSelection.Move;
     [SerializeField] GameObject tileMovementPrefab;
@@ -40,42 +40,68 @@ public class Unit : MapElement
     }
 
     public void InitUnitType() {
-        switch(unitType) {
+        switch(unitClass) {
             case UnitClass.Null:
+                Debug.Log("UNIT CLASS NULL");
                 break;
-            case UnitClass.Dragger:
-                InitWarrior();
+            case UnitClass.Dagger:
+                InitDagger();
                 break;
             case UnitClass.Sword:
-                InitHunter();
+                InitSword();
                 break;            
             case UnitClass.Spear:
-                InitHunter();
+                InitSpear();
                 break;            
             case UnitClass.Crossbow:
-                InitHunter();
+                InitCrossbow();
                 break;           
         }
     }
 
-    void InitWarrior() { 
-        name = "Warrior";
+    void InitDagger() { 
+        name = "Dagger";
         HP = 10;
-        AP = 7;
+        AP = 6;
+        Attack = 3;
+        Defense = 3;
+        RangedAttack = 0;
+        RangedDefense = 5;
+        Range = 2;
+    }
+
+    void InitSword()
+    {
+        name = "Sword";
+        HP = 10;
+        AP = 4;
         Attack = 5;
         Defense = 5;
         RangedAttack = 0;
         RangedDefense = 5;
+        Range = 1;
+    }
+    void InitSpear()
+    {
+        name = "Spearman";
+        HP = 10;
+        AP = 4;
+        Attack = 5;
+        Defense = 5;
+        RangedAttack = 0;
+        RangedDefense = 5;
+        Range = 3;
     }
 
-    void InitHunter() { 
-        name = "Hunter";
+    void InitCrossbow() { 
+        name = "Crossbow";
         HP = 5;
         AP = 4;
         Attack = 1;
         Defense = 3;
         RangedAttack = 8;
         RangedDefense = 5;
+        Range = 5;
     }
 
     private bool CheckPosition(Vector3Int position)
@@ -90,12 +116,12 @@ public class Unit : MapElement
     {
         if (selected)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKey(KeyCode.Alpha1))
             {
                 DestroyTiles();
                 unitSelection = UnitSelection.Move;
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKey(KeyCode.Alpha2))
             {
                 DestroyTiles();
                 unitSelection = UnitSelection.Attack;
@@ -108,7 +134,7 @@ public class Unit : MapElement
                     DrawMovement(pathfinding);
 
                 if (unitSelection == UnitSelection.Attack)
-                    DrawAttack();
+                    DrawAttack(pathfinding);
 
                 tileDrawn = true;
             }
@@ -141,14 +167,14 @@ public class Unit : MapElement
                 continue;
             for (int j = cellPosition.y - AP; j <= cellPosition.y + AP; j++)
             {
-                if (j < 0 || j > game.map.grid.GetLength(0))
+                if (j < 0 || j > game.map.grid.GetLength(1) || (i == cellPosition.x && j == cellPosition.y))
                     continue;
                 if (pathfinding.grid.grid[i, j].isWalkable)
                 {
                     List<PathNode> path = pathfinding.FindPath(cellPosition.x, cellPosition.y, i, j);
                     if (path != null)
                     {
-                        if(path.Count <= AP)
+                        if (path.Count <= AP)
                         {
                             tilesUI[tile] = Instantiate(tileMovementPrefab, ReturnCellPosition(new Vector3Int(i, j, 0)), transform.rotation);
                             tile++;
@@ -159,9 +185,53 @@ public class Unit : MapElement
         }
     }
 
-    private void DrawAttack()
+    private void DrawAttack(Pathfinding pathfinding)
     {
-        tilesUI[0] = Instantiate(tileAttackPrefab, transform.position, transform.rotation);
+        if (unitClass != UnitClass.Sword)
+        {
+            PathfindingTileDraw(pathfinding, Range);
+            return;
+        }
+        int tile = 0;
+        for (int i = cellPosition.x - Range; i <= cellPosition.x + Range; i++)
+        {
+            if (i < 0 || i > game.map.grid.GetLength(0))
+                continue;
+            for (int j = cellPosition.y - Range; j <= cellPosition.y + Range; j++)
+            {
+                if (j < 0 || j > game.map.grid.GetLength(1) || (i == cellPosition.x && j == cellPosition.y))
+                    continue;
+                tilesUI[tile] = Instantiate(tileAttackPrefab, ReturnCellPosition(new Vector3Int(i, j, 0)), transform.rotation);
+                tile++;
+            }
+        }
+    }
+
+    private void PathfindingTileDraw(Pathfinding pathfinding, int Range)
+    {
+        int tile = 0;
+        for (int i = cellPosition.x - Range; i <= cellPosition.x + Range; i++)
+        {
+            if (i < 0 || i > game.map.grid.GetLength(0))
+                continue;
+            for (int j = cellPosition.y - Range; j <= cellPosition.y + Range; j++)
+            {
+                if (j < 0 || j > game.map.grid.GetLength(1) || (i == cellPosition.x && j == cellPosition.y))
+                    continue;
+                if (pathfinding.grid.grid[i, j].isWalkable)
+                {
+                    List<PathNode> path = pathfinding.FindPath(cellPosition.x, cellPosition.y, i, j);
+                    if (path != null)
+                    {
+                        if (path.Count <= Range)
+                        {
+                            tilesUI[tile] = Instantiate(tileAttackPrefab, ReturnCellPosition(new Vector3Int(i, j, 0)), transform.rotation);
+                            tile++;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void DestroyTiles()

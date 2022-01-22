@@ -47,8 +47,7 @@ public class MainGame : MonoBehaviour
         {
             if (cursor.selected)
             {
-                List<PathNode> path = pathfinding.FindPath(curUnit.cellPosition.x, curUnit.cellPosition.y, cursor.cellPosition.x, cursor.cellPosition.y);
-                PathDebug(path);
+                PathDebug();
 
                 pathfinding.grid.grid[curUnit.cellPosition.x, curUnit.cellPosition.y].isWalkable = true;
                 pathfinding.grid.grid[cursor.cellPosition.x, cursor.cellPosition.y].isWalkable = false ;
@@ -56,6 +55,7 @@ public class MainGame : MonoBehaviour
                 curUnit.SetPosition(cursor.cellPosition);
                 curUnit.selected = false;
                 curUnit.tileDrawn = false;
+                curUnit.DrawTiles(pathfinding);
                 Debug.Log("Moved: " + curUnit.name + " to: " + curUnit.cellPosition);
                 curUnit = null;
             }
@@ -90,8 +90,9 @@ public class MainGame : MonoBehaviour
         }
     }
 
-    private void PathDebug(List<PathNode> path)
+    private void PathDebug()
     {
+        List<PathNode> path = pathfinding.FindPath(curUnit.cellPosition.x, curUnit.cellPosition.y, cursor.cellPosition.x, cursor.cellPosition.y);
         if (path != null)
         {
             for (int i = 0; i < path.Count - 1; i++)
