@@ -5,27 +5,32 @@ using UnityEngine;
 
 public class Unit : MapElement
 {
-    private int HP, AP, CurAP, Attack, Defense, RangedAttack, RangedDefense, Range;
+    private int HP, CurAP, Attack, Defense, RangedAttack, RangedDefense, Range;
     private int MAX_AP = 6;
-    private StatusEffect statusEffect = StatusEffect.Null;
+    private StatusEffect _StatusEffect = StatusEffect.Null;
+    private Map<MovementGrid> movementGrid;
 
     [SerializeField] string name;
-    [SerializeField] UnitClass unitClass = UnitClass.Null;
-    [SerializeField] UnitTeam unitTeam = UnitTeam.Null;
-    [SerializeField] UnitSelection unitSelection = UnitSelection.Move;
+    [SerializeField] UnitClass _UnitClass = UnitClass.Null;
+    [SerializeField] UnitTeam _UnitTeam = UnitTeam.Null;
+    [SerializeField] UnitSelection _UnitSelection = UnitSelection.Move;
     [SerializeField] GameObject tileMovementPrefab;
     [SerializeField] GameObject tileAttackPrefab;
 
-    public bool turnComplete;
+    public int AP;
     public bool selected = false;
     public bool tileDrawn = false;
     public GameObject[] tilesUI;
+    public UnitState _State = UnitState.Ready;
 
     private Unit() {}
 
     void Start()
     {
+        movementGrid = new Map<MovementGrid>(game.GetMapWidth(), game.GetMapHeight(), game.GetCellSize(), game.GetMapOrigin(), 
+            (Map<MovementGrid> map, int x, int y) => new MovementGrid(map, x, y));
         SetPosition(cellPosition);
+        ResetMovmentGrid();
         InitUnitType();
 
         tilesUI = new GameObject[100];
@@ -33,12 +38,15 @@ public class Unit : MapElement
 
     private void Update()
     {
-        if (turnComplete)
+        if (_State == UnitState.End)
+        {
             SetNextTurnAP();
+            _State = UnitState.Waiting;
+        }
     }
 
     public void InitUnitType() {
-        switch(unitClass) {
+        switch(_UnitClass) {
             case UnitClass.Null:
                 Debug.Log("UNIT CLASS NULL");
                 break;
@@ -117,21 +125,21 @@ public class Unit : MapElement
             if (Input.GetKey(KeyCode.Alpha1))
             {
                 DestroyTiles();
-                unitSelection = UnitSelection.Move;
+                _UnitSelection = UnitSelection.Move;
             }
             if (Input.GetKey(KeyCode.Alpha2))
             {
                 DestroyTiles();
-                unitSelection = UnitSelection.Attack;
+                _UnitSelection = UnitSelection.Attack;
             }
 
             // Draw Tiles
             if (!tileDrawn)
             {
-                if (unitSelection == UnitSelection.Move)
+                if (_UnitSelection == UnitSelection.Move)
                     DrawMovement(pathfinding);
 
-                if (unitSelection == UnitSelection.Attack)
+                if (_UnitSelection == UnitSelection.Attack)
                     DrawAttack(pathfinding);
 
                 tileDrawn = true;
@@ -147,18 +155,7 @@ public class Unit : MapElement
     private void DrawMovement(Pathfinding pathfinding)
     {
         int tile = 0;
-        //int orignal = 2;
-        //int h = orignal;
-        //int w = 0;
-        //for (int i = -h; i <= h; i++)
-        //{
-        //    w = orignal - Math.Abs(i);
-        //    for (int j = -w; j <= w; j++)
-        //    {
-        //        tilesUI[tile] = Instantiate(tileMovementPrefab, ReturnCellPosition(new Vector3Int(cellPosition.x + i, cellPosition.y + j, 0)), transform.rotation);
-        //        tile++;
-        //    }
-        //}
+        ResetMovmentGrid();
         for (int i = cellPosition.x - AP; i <= cellPosition.x + AP; i++)
         {
             if (i < 0 || i > game.map.grid.GetLength(0))
@@ -176,6 +173,10 @@ public class Unit : MapElement
                         {
                             tilesUI[tile] = Instantiate(tileMovementPrefab, ReturnCellPosition(new Vector3Int(i, j, 0)), transform.rotation);
                             tile++;
+
+                            movementGrid.grid[i, j].SetIsValidMovePosition(true);
+                            //movementGrid.grid[i, j].pathLength = Mathf.Abs((cellPosition.x - Mathf.Abs(i))) + Mathf.Abs((cellPosition.y - Mathf.Abs(j)));
+                            movementGrid.grid[i, j].pathLength = path.Count - 1;
                         }
                     }
                 }
@@ -185,7 +186,7 @@ public class Unit : MapElement
 
     private void DrawAttack(Pathfinding pathfinding)
     {
-        if (unitClass != UnitClass.Sword)
+        if (_UnitClass != UnitClass.Sword)
         {
             PathfindingTileDraw(pathfinding, Range);
             return;
@@ -208,6 +209,7 @@ public class Unit : MapElement
     private void PathfindingTileDraw(Pathfinding pathfinding, int Range)
     {
         int tile = 0;
+        ResetMovmentGrid();
         for (int i = cellPosition.x - Range; i <= cellPosition.x + Range; i++)
         {
             if (i < 0 || i > game.map.grid.GetLength(0))
@@ -251,11 +253,19 @@ public class Unit : MapElement
 
     public void SetPosition(Vector3Int position)
     {
-        if (CheckPosition(position))
+        MovementGrid movementCell = movementGrid.grid[position.x, position.y];
+        if (movementCell.GetIsValidMovePosition())
         {
-            OccupyTile(position);
-            SetWorldPosition(position, game);
-            cellPosition = position;
+            if (CheckPosition(position))
+            {
+                OccupyTile(position);
+                SetWorldPosition(position, game);
+                cellPosition = position;
+                this.AP -= movementCell.pathLength;
+            }
+        } else
+        {
+            Debug.Log("Invalid Movement Position");
         }
     }
 
@@ -276,4 +286,43 @@ public class Unit : MapElement
             AP = 6;
         CurAP = AP;
     }
+
+    private void ResetMovmentGrid()
+    {
+        // Reset Movement Grid
+        for (int i = 0; i < movementGrid.grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < movementGrid.grid.GetLength(1); j++)
+            {
+                if (movementGrid.grid[i, j] == null)
+                {
+                    Debug.Log("Movement Grid Null");
+                    return;
+                }
+                movementGrid.grid[i, j].SetIsValidMovePosition(false);
+            }
+        }
+    }
+}
+
+
+public class MovementGrid
+{
+    private Map<MovementGrid> grid;
+    private int x;
+    private int y;
+    private bool isValidMovePosition;
+    
+    public int pathLength;
+
+    public MovementGrid(Map<MovementGrid> grid, int x, int y)
+    {
+        this.grid = grid;
+        this.x = x;
+        this.y = y;
+        isValidMovePosition = true;
+    }
+
+    public void SetIsValidMovePosition(bool rhs) { isValidMovePosition = rhs; }
+    public bool GetIsValidMovePosition() { return isValidMovePosition; }
 }

@@ -55,6 +55,8 @@ public class MainGame : MonoBehaviour
                 curUnit.SetPosition(cursor.cellPosition);
                 curUnit.selected = false;
                 curUnit.tileDrawn = false;
+                if (curUnit.AP == 1)
+                    curUnit._State = UnitState.End;
                 curUnit.DrawTiles(pathfinding);
                 Debug.Log("Moved: " + curUnit.name + " to: " + curUnit.cellPosition);
                 curUnit = null;
