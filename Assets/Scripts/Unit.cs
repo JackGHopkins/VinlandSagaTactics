@@ -21,8 +21,6 @@ public class Unit : MapElement
     public bool tileDrawn = false;
     public GameObject[] tilesUI;
 
-    //static Unit() => new Unit();
-
     private Unit() {}
 
     void Start()
