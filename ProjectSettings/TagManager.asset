@@ -47,3 +47,6 @@ TagManager:
   - name: Unit
     uniqueID: 142689593
     locked: 0
+  - name: Dialogue
+    uniqueID: 3666376323
+    locked: 0

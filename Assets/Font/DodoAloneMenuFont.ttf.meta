@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: d515cf992af12684fb36c4ab6429ff59
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Dodo_Font_Menu_v0.2
+  fontNames:
+  - Dodo_Font_Menu_v0.2
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5c49d8d689212e94486ec7929fedb07d, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
