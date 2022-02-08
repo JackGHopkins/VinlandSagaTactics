@@ -50,7 +50,7 @@ public class MainGame : MonoBehaviour
                 PathDebug();
 
                 pathfinding.grid.grid[curUnit.cellPosition.x, curUnit.cellPosition.y].isWalkable = true;
-                pathfinding.grid.grid[cursor.cellPosition.x, cursor.cellPosition.y].isWalkable = false ;
+                pathfinding.grid.grid[cursor.cellPosition.x, cursor.cellPosition.y].isWalkable = false;
                 cursor.selected = false;
                 curUnit.SetPosition(cursor.cellPosition);
                 curUnit.selected = false;
